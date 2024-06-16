@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 
 import { Button, Img, Input, Text, TextArea } from "components";
 import About from "pages/components/about";
-import { ParallaxProvider } from "react-scroll-parallax";
 
 const RdpartyPage = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
