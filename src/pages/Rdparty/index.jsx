@@ -1,77 +1,131 @@
-import React, { useState, useEffect ,useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Button, Img, Input, Text, TextArea } from "components";
+import About from "pages/components/about";
 
 const RdpartyPage = () => {
- const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [openMenu, setOpenMenu] = useState(false);
+  useEffect(() => {
+    let lastScrollTop = 0;
+    const header = document.querySelector(".header");
 
- useEffect(() => {
-   let lastScrollTop = 0;
-   const header = document.querySelector(".header");
+    const handleScroll = () => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-   const handleScroll = () => {
-     const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      if (scrollTop > lastScrollTop) {
+        setIsHeaderVisible(false); // Scrolling down
+      } else {
+        setIsHeaderVisible(true); // Scrolling up
+      }
 
-     if (scrollTop > lastScrollTop) {
-       setIsHeaderVisible(false); // Scrolling down
-     } else {
-       setIsHeaderVisible(true); // Scrolling up
-     }
+      lastScrollTop = scrollTop;
+    };
 
-     lastScrollTop = scrollTop;
-   };
+    window.addEventListener("scroll", handleScroll);
 
-   window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-   return () => {
-     window.removeEventListener("scroll", handleScroll);
-   };
- }, []);
+  const handleScrollToAbout = () => {
+    const aboutSection = document.getElementById("aboutUs");
 
-   const handleScrollToAbout = () => {
-     const aboutSection = document.getElementById("about");
+    if (aboutSection) {
+      window.scrollTo({
+        top: aboutSection.offsetTop,
+        behavior: "smooth",
+      });
+    }
 
-     if (aboutSection) {
-       window.scrollTo({
-         top: aboutSection.offsetTop,
-         behavior: "smooth",
-       });
-     }
-   };
-   const handleScrollToServices = () => {
-     const aboutSection = document.getElementById("services");
+    handleCloseMenu();
+  };
+  const handleScrollToServices = () => {
+    const aboutSection = document.getElementById("services");
 
-     if (aboutSection) {
-       window.scrollTo({
-         top: aboutSection.offsetTop,
-         behavior: "smooth",
-       });
-     }
-   };
-   const handleScrollToProducts = () => {
-     const aboutSection = document.getElementById("product");
+    if (aboutSection) {
+      window.scrollTo({
+        top: aboutSection.offsetTop,
+        behavior: "smooth",
+      });
+    }
+    handleCloseMenu();
+  };
+  const handleScrollToProducts = () => {
+    const aboutSection = document.getElementById("product");
 
-     if (aboutSection) {
-       window.scrollTo({
-         top: aboutSection.offsetTop,
-         behavior: "smooth",
-       });
-     }
-   };
-   const handleScrollToContact = () => {
-     const aboutSection = document.getElementById("contact");
+    if (aboutSection) {
+      window.scrollTo({
+        top: aboutSection.offsetTop,
+        behavior: "smooth",
+      });
+    }
+    handleCloseMenu();
+  };
+  const handleScrollToContact = () => {
+    const aboutSection = document.getElementById("contact");
 
-     if (aboutSection) {
-       window.scrollTo({
-         top: aboutSection.offsetTop,
-         behavior: "smooth",
-       });
-     }
-   };
+    if (aboutSection) {
+      window.scrollTo({
+        top: aboutSection.offsetTop,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handleOpenMenu = () => {
+    setOpenMenu(!openMenu);
+    handleScrollToTop();
+    console.log(openMenu);
+  };
+  const handleCloseMenu = () => {
+    setOpenMenu(false);
+  };
 
   return (
     <>
-      <div className="bg-black-900 flex flex-col font-seravek items-end justify-start mx-auto pb-[29px] w-full">
+      <div className="bg-black-900 flex flex-col font-seravek items-end justify-start mx-auto pb-[29px] w-full  relative">
+        {openMenu && (
+          <div className="w-full absolute top-0 left-0 right-0 h-full bg-gray-600 bg-opacity-70 z-10 pt-24">
+            <div className="flex-col w-full h-full  gap-8">
+              <div
+                onClick={handleScrollToAbout}
+                className="px-6 py-3 m-4 hover:bg-gray-400 hover:bg-opacity-40 hover:border-2 hover:border-white-A700_82 rounded-md"
+              >
+                <div className="text-[15px] text-white-A700">
+                  <Text size="txtSeravek15">ABOUT US</Text>
+                </div>
+              </div>
+              <div
+                onClick={handleScrollToServices}
+                className="px-6 py-3 m-4 hover:bg-gray-400 hover:bg-opacity-40 hover:border-2 hover:border-white-A700_82 rounded-md"
+              >
+                <div href="javascript:" className="text-[15px] text-white-A700">
+                  <Text size="txtSeravek15">SERVICES</Text>
+                </div>
+              </div>
+              <div
+                onClick={handleScrollToProducts}
+                className="px-6 py-3 m-4 hover:bg-gray-400 hover:bg-opacity-40 hover:border-2 hover:border-white-A700_82 rounded-md "
+              >
+                <div
+                  href="javascript:"
+                  className="  text-[15px] text-white-A700"
+                >
+                  <Text size="txtSeravek15">PRODUCTS</Text>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex flex-col items-center w-full">
           <header
             className={`bg-black-900_14 backdrop-blur-sm border-b-2 border-gray-700_7f border-solid flex md:gap-10 h-[57px] md:h-auto items-center justify-between md:px-5 px-[90px] py-[15px] w-full fixed z-50 transition-all duration-300 ${
@@ -83,6 +137,25 @@ const RdpartyPage = () => {
               src="images/img_gssenterpriselogo.png"
               alt="gssenterpriselo"
             />
+
+            {!openMenu ? (
+              <div className="hidden md:block sm:block lg:hidden xl:hidden">
+                <div className="flex flex-col gap-1.5" onClick={handleOpenMenu}>
+                  <div className="w-6 bg-white-A700_68 h-0.5"></div>
+                  <div className="w-4 bg-white-A700_82 h-0.5"></div>
+                  <div className="w-6 bg-white-A700_68 h-0.5"></div>
+                </div>
+              </div>
+            ) : (
+              <div
+                className="relative sm:block md:block lg:hidden xl:hidden pr-4"
+                onClick={handleCloseMenu}
+              >
+                <div className="absolute w-5 rotate-45 h-0.5 bg-white-A700"></div>
+                <div className="absolute w-5 -rotate-45 h-0.5 bg-white-A700"></div>
+              </div>
+            )}
+
             <ul className="flex flex-row sm:hidden items-center justify-center common-row-list">
               <li onClick={handleScrollToAbout}>
                 <div className="text-[15px] text-white-A700">
@@ -112,7 +185,7 @@ const RdpartyPage = () => {
           className="flex flex-col font-varelaround xl:gap-[10px] md:gap-5 xs:gap-44 sm:gap-44  items-start justify-start md:px-5 w-[94%] md:w-full"
           id="about"
         >
-          <div className="md:h-[711px] h-[780px] relative w-full">
+          <div className="md:h-[90vh] md:mb-14 h-[780px] relative w-full">
             <div className="absolute md:h-[711px] h-[780px] inset-y-[0] my-auto right-[0] w-[59%] md:w-full">
               <Img
                 className="absolute  right-[0] top-[0]"
@@ -125,58 +198,61 @@ const RdpartyPage = () => {
                 alt="rectangleNineteen"
               /> */}
             </div>
-            <div className="absolute flex flex-col gap-[10px] md:h-auto h-max inset-y-[0] items-start justify-start left-[0] max-w-[734px] my-auto w-full">
-              <div className="flex flex-col gap-[15px] h-[319px] md:h-auto items-start justify-start max-w-[734px] w-full">
-                <Text
-                  className="max-w-[582px] md:max-w-full md:text-5xl text-[76.24px] text-blue_gray-100"
-                  size="txtVarelaRoundRegular7624"
-                >
-                  <span className="text-blue_gray-100 font-raleway text-left font-extrabold">
-                    GSS - THE{" "}
-                  </span>
-                  <span className="text-purple-A400 font-raleway text-left font-extrabold">
-                    ONE
-                  </span>
-                  <span className="text-blue_gray-100 font-raleway text-left font-extrabold">
-                    {" "}
-                    SOLUTION
-                  </span>
-                </Text>
-                <Text
-                  className="max-w-[734px] md:max-w-full text-blue_gray-100 text-xl"
-                  size="txtVarelaRoundRegular20"
-                >
-                  Welcome to Global Standard Services (GSS), where innovation
-                  meets reliability in the world of comprehensive IT solutions.
-                  As a leading provider of integrated hardware and software
-                  services, GSS is committed to empowering businesses with
-                  cutting-edge technologies tailored to their unique needs.
-                </Text>
-              </div>
-              <div className="flex flex-row gap-[22px] h-[45px] md:h-auto items-start justify-start w-[316px] mt-5">
-                <Button
-                  className="cursor-pointer h-[45px] bg-gradient-to-r from-purple-A400 to-purple-A700 hover:from-purple-A700 hover:to-purple-A400 text-white-A700 leading-[normal] text-[12.31px] text-center uppercase w-[147px]"
-                  shape="round"
-                  // color="purple_A400_purple_A700"
-                  onClick={handleScrollToContact}
-                >
-                  GET IN TOUCH
-                </Button>
-                <Button
-                  className="cursor-pointer h-[45px] leading-[normal] text-[11.97px] text-center uppercase w-[147px]"
-                  shape="round"
-                  color="white_A700"
-                  variant="outline"
-                  onClick={handleScrollToServices}
-                >
-                  learn more
-                </Button>
+            <div className="absolute flex flex-col sm:flex-col-reverse md:flex-col-reverse gap-[10px] md:h-screen sm:h-screen h-max inset-y-[0] items-start justify-start left-[0] max-w-[734px] my-auto w-full">
+              <div>
+                <div className="flex flex-col gap-[15px] h-[319px] md:h-auto items-start justify-start max-w-[734px] w-full">
+                  <Text
+                    className="max-w-[582px] md:max-w-full md:text-5xl text-[76.24px] text-blue_gray-100"
+                    size="txtVarelaRoundRegular7624"
+                  >
+                    <span className="text-blue_gray-100 font-raleway text-left font-extrabold">
+                      GSS - THE{" "}
+                    </span>
+                    <span className="text-purple-A400 font-raleway text-left font-extrabold">
+                      ONE
+                    </span>
+                    <span className="text-blue_gray-100 font-raleway text-left font-extrabold">
+                      {" "}
+                      SOLUTION
+                    </span>
+                  </Text>
+                  <Text
+                    className="max-w-[734px] md:max-w-full text-blue_gray-100 text-xl"
+                    size="txtVarelaRoundRegular20"
+                  >
+                    Welcome to Global Standard Services (GSS), where innovation
+                    meets reliability in the world of comprehensive IT
+                    solutions. As a leading provider of integrated hardware and
+                    software services, GSS is committed to empowering businesses
+                    with cutting-edge technologies tailored to their unique
+                    needs.
+                  </Text>
+                </div>
+                <div className="flex flex-row gap-[22px] h-[45px] md:h-auto items-start justify-start w-[316px] mt-5">
+                  <Button
+                    className="cursor-pointer h-[45px] bg-gradient-to-r from-purple-A400 to-purple-A700 hover:from-purple-A700 hover:to-purple-A400 text-white-A700 leading-[normal] text-[12.31px] text-center uppercase w-[147px]"
+                    shape="round"
+                    // color="purple_A400_purple_A700"
+                    onClick={handleScrollToContact}
+                  >
+                    GET IN TOUCH
+                  </Button>
+                  <Button
+                    className="cursor-pointer h-[45px] leading-[normal] text-[11.97px] text-center uppercase w-[147px]"
+                    shape="round"
+                    color="white_A700"
+                    variant="outline"
+                    onClick={handleScrollToAbout}
+                  >
+                    learn more
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
           <div id="services">
             <Text
-              className="md:ml-[0] ml-[3px] sm:text-4xl md:text-[38px] text-[40px] text-white-A700 uppercase w-[47%] sm:w-full mt-28"
+              className="md:ml-[0] ml-[3px] sm:text-4xl md:text-[38px] text-[40px] text-white-A700 uppercase w-[47%] h-auto sm:w-full mt-28"
               size="txtVarelaRoundRegular40"
             >
               <span className="text-white-A700 font-varelaround text-left font-normal">
@@ -262,7 +338,7 @@ const RdpartyPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-start justify-start max-w-[1226px] mx-auto w-full">
+          <div className="flex flex-col items-start justify-start mt-14 max-w-[1226px] mx-auto w-full">
             <div
               className="flex flex-col items-center justify-start"
               id="product"
@@ -421,6 +497,10 @@ const RdpartyPage = () => {
                 </div>
               </div>
             </div>
+            <div id="aboutUs" className="mt-[138px]">
+              <About />
+            </div>
+
             <div id="">
               {" "}
               <Text
@@ -445,7 +525,7 @@ const RdpartyPage = () => {
               className=" flex justify-center w-full h-full  mt-[62px]"
               id="contact"
             >
-              <div className="m-4 h-full w-[85%] rounded-xl bg-gradient-to-r from-pink-600 via-purple-800 to-purple-900 p-1">
+              <div className="md:m-4 h-full sm:w-full w-full md:w-[85%] lg:w-full xl:w-full rounded-xl bg-gradient-to-r from-pink-600 via-purple-800 to-purple-900 p-1">
                 <div className="h-full w-full rounded-lg bg-black-900">
                   <div className="p-10">
                     <div className="flex sm:flex-col xl:flex-row md:flex-row w-full justify-between gap-5">
