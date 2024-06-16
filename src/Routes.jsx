@@ -2,11 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "pages/Home";
 import NotFound from "pages/NotFound";
-import { ParallaxProvider } from "react-scroll-parallax";
 const Rdparty = React.lazy(() => import("pages/Rdparty"));
 const ProjectRoutes = () => {
   return (
-    <ParallaxProvider>
+
     <React.Suspense fallback={<>Loading...</>}>
       <Router>
         <Routes>
@@ -15,7 +14,7 @@ const ProjectRoutes = () => {
           <Route path="/" element={<Rdparty />} />
         </Routes>
       </Router>
-    </React.Suspense></ParallaxProvider>
+    </React.Suspense>
   ); 
 };
 export default ProjectRoutes;
